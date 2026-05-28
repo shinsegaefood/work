@@ -222,7 +222,7 @@ body {
     </div>
     <div style="display:flex;gap:6px">
       <div class="bal-badge" style="background:#f1f5f9;padding:6px 10px">
-        <span class="bal-label" style="color:#94a3b8">1~4월</span>
+        <span class="bal-label" style="color:#94a3b8">이월</span>
         <span id="pastValue" class="bal-value" style="color:#475569;font-size:14px">0h</span>
       </div>
       <div class="bal-badge" style="background:#f1f5f9;padding:6px 10px">
@@ -387,18 +387,14 @@ function renderDash(){
   $("dashName").textContent=ed.name;
   $("dashId").textContent=ed.empId;
   var past=ed.pastHours||0;
-  var monthly=ed.finalBalance-past;
+  var monthly=ed.monthlyBalance||0;
+  var total=ed.finalBalance||0;
   $("pastValue").textContent=past+"h";
   $("monthValue").textContent=(monthly>=0?"+":"")+monthly.toFixed(1)+"h";
   $("monthValue").style.color=monthly>=0?"#475569":"#ef4444";
-  $("balValue").textContent=ed.finalBalance.toFixed(1)+"h";
-  // 공지사항
-  if(ed.notice){
-    $("noticeBanner").textContent=ed.notice;
-    show("noticeBanner");
-  }else{
-    hide("noticeBanner");
-  }
+  $("balValue").textContent=total.toFixed(1)+"h";
+  if(ed.notice){$("noticeBanner").textContent=ed.notice;show("noticeBanner");}
+  else{hide("noticeBanner");}
   renderWeek();
 }
 function changeWeek(dir){
@@ -466,7 +462,7 @@ function renderModal(){
 
   show("hoursSection");
   $("hoursLabel").textContent=state.workType==="대체휴무"?"사용 시간":"초과근무 시간";
-  $("chipRow").innerHTML=[1,2,3,4,5,6,7,8].map(function(h){
+  $("chipRow").innerHTML=[1,2,3,4,5,6,7,8,9,10,11,12].map(function(h){
     return '<button class="chip'+(state.hours===String(h)?" active":"")+'" onclick="selectHour('+h+')">'+h+'</button>';
   }).join("");
   $("hourInput").value=state.hours;
