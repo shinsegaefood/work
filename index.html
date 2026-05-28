@@ -7,29 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ╔══════════════════════════════════════════════════════╗
-   ║  ↓↓↓ 여기에 Apps Script 배포 URL을 붙여넣으세요 ↓↓↓  ║
-   ╚══════════════════════════════════════════════════════╝ */
-
-:root {
-  --script-url: "";
-  /* 위 값은 사용하지 않습니다. 아래 <script> 맨 위의 SCRIPT_URL을 수정하세요 */
-}
-
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
   font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
-  background:#f8fafc;
-  color:#1e293b;
-  overflow-x:hidden;
-  min-height:100vh;
+  background:#f8fafc; color:#1e293b; overflow-x:hidden; min-height:100vh;
 }
-
-/* ── 공통 ── */
 .bg {
   min-height:100vh; display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(160deg,#0f172a 0%,#1e293b 50%,#312e81 100%);
-  padding:20px;
+  background:linear-gradient(160deg,#0f172a 0%,#1e293b 50%,#312e81 100%); padding:20px;
 }
 .card {
   background:#fff; border-radius:24px; padding:40px 28px 32px;
@@ -41,45 +26,34 @@ body {
   width:68px; height:68px; border-radius:18px;
   background:linear-gradient(135deg,#6366f1,#8b5cf6);
   display:inline-flex; align-items:center; justify-content:center;
-  margin-bottom:14px; box-shadow:0 8px 24px rgba(99,102,241,0.3);
-  font-size:30px;
+  margin-bottom:14px; box-shadow:0 8px 24px rgba(99,102,241,0.3); font-size:30px;
 }
 .app-title { font-size:26px; font-weight:800; letter-spacing:-0.5px; margin-bottom:4px; }
 .app-sub { font-size:14px; color:#94a3b8; }
-
 .field { text-align:left; margin-bottom:16px; }
 .field label { font-size:13px; font-weight:600; color:#475569; display:block; margin-bottom:8px; }
 .text-input {
   width:100%; padding:14px 16px; border:2px solid #e2e8f0; border-radius:12px;
-  font-size:16px; font-weight:600; outline:none; transition:border 0.2s;
-  font-family:inherit;
+  font-size:16px; font-weight:600; outline:none; transition:border 0.2s; font-family:inherit;
 }
 .text-input:focus { border-color:#6366f1; }
-
 .sheet-row { display:flex; gap:8px; flex-wrap:wrap; }
 .sheet-chip {
   padding:10px 18px; border-radius:10px; border:none; font-size:14px;
-  font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s;
-  background:#f1f5f9; color:#475569;
+  font-weight:700; cursor:pointer; font-family:inherit; background:#f1f5f9; color:#475569;
 }
 .sheet-chip.active { background:#6366f1; color:#fff; }
-
 .btn-primary {
   width:100%; padding:16px; border:none; border-radius:14px;
   font-size:16px; font-weight:700; cursor:pointer; font-family:inherit;
   background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff;
-  transition:opacity 0.2s;
 }
 .btn-primary:disabled { opacity:0.4; }
-
 .error-box {
   background:#fef2f2; color:#dc2626; padding:12px 16px;
   border-radius:10px; font-size:13px; margin-bottom:16px;
 }
-
-/* ── 대시보드 ── */
 .dash { min-height:100vh; background:#f8fafc; padding-bottom:80px; }
-
 .header {
   display:flex; justify-content:space-between; align-items:center;
   padding:14px 18px; background:#fff; border-bottom:1px solid #e2e8f0;
@@ -98,7 +72,6 @@ body {
 }
 .bal-label { font-size:10px; color:rgba(255,255,255,0.7); font-weight:600; }
 .bal-value { font-size:18px; font-weight:800; color:#fff; }
-
 .week-nav {
   display:flex; align-items:center; justify-content:center;
   gap:16px; padding:14px 20px; background:#fff;
@@ -113,7 +86,6 @@ body {
   font-size:10px; background:#dbeafe; color:#3b82f6;
   padding:2px 8px; border-radius:6px; font-weight:700;
 }
-
 .sum-row {
   display:grid; grid-template-columns:repeat(4,1fr); gap:8px;
   padding:0 16px 12px; background:#fff; border-bottom:1px solid #f1f5f9;
@@ -121,27 +93,20 @@ body {
 .sum-item { padding:10px 8px; background:#f8fafc; border-radius:10px; text-align:center; }
 .sum-num { font-size:18px; font-weight:800; }
 .sum-label { font-size:11px; color:#94a3b8; font-weight:600; margin-top:2px; }
-
 .week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; padding:12px 8px; }
 .day-card {
   border-radius:12px; padding:8px 4px; text-align:center;
-  cursor:pointer; min-height:90px; border:1px solid #e2e8f0;
-  background:#fff; transition:all 0.15s;
+  cursor:pointer; min-height:90px; border:1px solid #e2e8f0; background:#fff;
 }
 .day-card.today { border:2px solid #3b82f6; }
-.day-card.selected { border:2px solid #6366f1; background:#eef2ff; }
 .day-name { font-size:11px; font-weight:600; display:block; }
 .day-num { font-size:16px; font-weight:800; display:block; }
 .day-body { display:flex; flex-direction:column; align-items:center; gap:2px; }
-.type-tag {
-  font-size:9px; font-weight:700; padding:2px 5px; border-radius:4px; white-space:nowrap;
-}
+.type-tag { font-size:9px; font-weight:700; padding:2px 5px; border-radius:4px; white-space:nowrap; }
 .day-h { font-size:12px; font-weight:700; color:#475569; }
 .day-conv { font-size:10px; font-weight:700; }
 .day-empty { display:flex; align-items:center; justify-content:center; height:40px; }
 .day-plus { font-size:18px; opacity:0.15; }
-
-/* ── 모달 ── */
 .overlay {
   position:fixed; top:0; left:0; right:0; bottom:0;
   background:rgba(0,0,0,0.5); display:flex;
@@ -162,26 +127,22 @@ body {
   background:#f1f5f9; border:none; border-radius:8px;
   width:32px; height:32px; font-size:16px; cursor:pointer; color:#64748b;
 }
-
 .type-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:24px; }
 .type-opt {
   border-radius:14px; padding:14px 10px; text-align:center; cursor:pointer;
   display:flex; flex-direction:column; align-items:center; gap:4px;
-  border:1px solid #e2e8f0; background:#fff; transition:all 0.15s; font-family:inherit;
+  border:1px solid #e2e8f0; background:#fff; font-family:inherit;
 }
 .type-opt .icon { font-size:22px; }
 .type-opt .name { font-size:14px; font-weight:500; color:#64748b; }
 .type-opt .desc { font-size:10px; color:#94a3b8; }
-.type-opt.active .name { font-weight:700; }
-
 .chip-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
 .chip {
   width:40px; height:40px; border-radius:10px; border:none;
   font-size:15px; font-weight:700; cursor:pointer; font-family:inherit;
-  background:#f1f5f9; color:#475569; transition:all 0.15s;
+  background:#f1f5f9; color:#475569;
 }
 .chip.active { background:#6366f1; color:#fff; }
-
 .hour-row { display:flex; align-items:center; gap:8px; }
 .hour-input {
   flex:1; padding:12px 16px; border:2px solid #e2e8f0; border-radius:12px;
@@ -189,21 +150,18 @@ body {
 }
 .hour-input:focus { border-color:#6366f1; }
 .hour-unit { font-size:14px; color:#64748b; font-weight:600; }
-
 .preview {
   display:flex; justify-content:space-between; align-items:center;
   padding:14px 18px; background:#f8fafc; border-radius:12px; margin-bottom:16px;
 }
 .preview-label { font-size:13px; color:#64748b; font-weight:600; }
 .preview-value { font-size:20px; font-weight:800; }
-
 .submit-msg {
   padding:12px 16px; border-radius:10px; font-size:13px; font-weight:600;
   margin-bottom:12px; text-align:center;
 }
 .submit-msg.ok { background:#f0fdf4; color:#166534; }
 .submit-msg.err { background:#fef2f2; color:#991b1b; }
-
 .footer {
   position:fixed; bottom:0; left:0; right:0;
   padding:12px 20px; background:#fff; border-top:1px solid #e2e8f0; text-align:center;
@@ -213,14 +171,12 @@ body {
   padding:10px 24px; font-size:14px; color:#475569; cursor:pointer;
   font-weight:600; font-family:inherit;
 }
-
 .hidden { display:none !important; }
 .connecting { color:#94a3b8; font-size:14px; padding:10px 0; }
 </style>
 </head>
 <body>
 
-<!-- ═══ 홈 화면 ═══ -->
 <div id="homeScreen" class="bg">
   <div class="card">
     <div class="logo-wrap">
@@ -248,7 +204,6 @@ body {
   </div>
 </div>
 
-<!-- ═══ 대시보드 ═══ -->
 <div id="dashScreen" class="dash hidden">
   <div class="header">
     <div class="header-left">
@@ -278,7 +233,6 @@ body {
   </div>
 </div>
 
-<!-- ═══ 입력 모달 ═══ -->
 <div id="modal" class="overlay hidden" onclick="closeModal()">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -305,333 +259,238 @@ body {
 </div>
 
 <script>
-// ╔══════════════════════════════════════════════════════╗
-// ║  ↓↓↓ 여기에 Apps Script 배포 URL을 붙여넣으세요 ↓↓↓  ║
-// ╚══════════════════════════════════════════════════════╝
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwl4ndyWgjfAjwgV6Qql39mx2OZo_mk-q8Ekpg_hIA6GmmwXVFVuaqk4-K-LTGJ4Fz5g/exec";
-// 예시: const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwl4ndyWgjfAjwgV6Qql39mx2OZo_mk-q8Ekpg_hIA6GmmwXVFVuaqk4-K-LTGJ4Fz5g/exec";
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ↓↓↓ 아래 URL만 수정하세요 (따옴표 안에 붙여넣기) ↓↓↓      ║
+// ╚══════════════════════════════════════════════════════════════╝
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwl4ndyWgjfAjwgV6Qql39mx2OZo_mk-q8Ekpg_hIA6GmmwXVFVuaqk4-K-LTGJ4Fz5g/exec";
 
 
-// ── 상수 ──
-const WORK_TYPES = [
-  { value:"정상퇴근", label:"정상퇴근", color:"#64748b", icon:"🏠", desc:"기본 근무" },
-  { value:"연장근무", label:"연장근무", color:"#f59e0b", icon:"⏰", desc:"×1.5 환산" },
-  { value:"휴일근무", label:"휴일근무", color:"#ef4444", icon:"📅", desc:"8h+초과×1.5" },
-  { value:"대체휴무", label:"대체휴무", color:"#22c55e", icon:"🌴", desc:"잔여 차감" },
+var WORK_TYPES = [
+  { value:"정상퇴근", label:"정상퇴근", color:"#64748b", icon:"\uD83C\uDFE0", desc:"기본 근무" },
+  { value:"연장근무", label:"연장근무", color:"#f59e0b", icon:"\u23F0", desc:"\u00D71.5 환산" },
+  { value:"휴일근무", label:"휴일근무", color:"#ef4444", icon:"\uD83D\uDCC5", desc:"8h+초과\u00D71.5" },
+  { value:"대체휴무", label:"대체휴무", color:"#22c55e", icon:"\uD83C\uDF34", desc:"잔여 차감" }
 ];
-const DAY_KR = ["일","월","화","수","목","금","토"];
+var DAY_KR = ["일","월","화","수","목","금","토"];
 
-// ── 상태 ──
-let state = {
-  sheets: [],
-  selectedSheet: "",
-  empId: "",
-  empName: "",
-  empData: null,
-  currentWeek: new Date(),
-  selectedDate: null,
-  workType: "연장근무",
-  hours: "",
+var state = {
+  sheets:[], selectedSheet:"", empId:"", empName:"",
+  empData:null, currentWeek:new Date(), selectedDate:null,
+  workType:"연장근무", hours:""
 };
 
-// ── 유틸 ──
 function fmt(d) {
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 function getWeekDates(base) {
-  const d = new Date(base), sun = new Date(d);
-  sun.setDate(d.getDate() - d.getDay());
-  const arr = [];
-  for(let i=0;i<7;i++){ const dd=new Date(sun); dd.setDate(sun.getDate()+i); arr.push(dd); }
+  var d=new Date(base), sun=new Date(d);
+  sun.setDate(d.getDate()-d.getDay());
+  var arr=[];
+  for(var i=0;i<7;i++){var dd=new Date(sun);dd.setDate(sun.getDate()+i);arr.push(dd);}
   return arr;
 }
-function calcConv(type, hours) {
-  const h = parseFloat(hours)||0;
+function calcConv(type,hours) {
+  var h=parseFloat(hours)||0;
   if(type==="연장근무") return h*1.5;
-  if(type==="휴일근무") return h>8 ? 8+(h-8)*1.5 : h;
+  if(type==="휴일근무") return h>8?8+(h-8)*1.5:h;
   if(type==="대체휴무") return -Math.abs(h);
   return 0;
 }
 
-async function api(params) {
-  const u = new URL(SCRIPT_URL);
-  Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
-  const r = await fetch(u.toString());
-  if(!r.ok) throw new Error("서버 오류");
-  return r.json();
+function api(params) {
+  var u=new URL(SCRIPT_URL);
+  Object.entries(params).forEach(function(kv){u.searchParams.set(kv[0],kv[1]);});
+  return fetch(u.toString(), {redirect:"follow"})
+    .then(function(r){
+      if(!r.ok) throw new Error("서버 오류: "+r.status);
+      return r.json();
+    });
 }
 
-function $(id){ return document.getElementById(id); }
-function show(id){ $(id).classList.remove("hidden"); }
-function hide(id){ $(id).classList.add("hidden"); }
+function $(id){return document.getElementById(id);}
+function show(id){$(id).classList.remove("hidden");}
+function hide(id){$(id).classList.add("hidden");}
 
-// ── 초기화 ──
-window.addEventListener("DOMContentLoaded", async()=>{
+window.addEventListener("DOMContentLoaded", function(){
   if(!SCRIPT_URL || SCRIPT_URL==="여기에_URL_붙여넣기"){
-    $("connectingMsg").textContent = "⚠️ 코드 내 SCRIPT_URL을 설정해주세요";
+    $("connectingMsg").textContent = "코드 내 SCRIPT_URL을 설정해주세요";
     return;
   }
-  // 입력 이벤트
   $("empIdInput").addEventListener("input", checkEnterBtn);
   $("empNameInput").addEventListener("input", checkEnterBtn);
-  $("empNameInput").addEventListener("keydown", e=>{ if(e.key==="Enter") handleEnter(); });
-  $("hourInput").addEventListener("input", ()=>{ state.hours=$("hourInput").value; updatePreview(); });
+  $("empNameInput").addEventListener("keydown", function(e){if(e.key==="Enter")handleEnter();});
+  $("hourInput").addEventListener("input", function(){state.hours=$("hourInput").value;updatePreview();});
 
-  try {
-    const d = await api({action:"getSheets"});
-    if(d.success){
-      state.sheets = d.sheets;
-      hide("connectingMsg");
-      renderSheets();
-      if(d.sheets.length===1){ state.selectedSheet=d.sheets[0]; renderSheets(); show("empFields"); }
-    }
-  } catch(e) {
-    $("connectingMsg").textContent = "⚠️ 서버 연결 실패";
-  }
+  api({action:"getSheets"})
+    .then(function(d){
+      if(d.success){
+        state.sheets=d.sheets;
+        hide("connectingMsg");
+        renderSheets();
+        if(d.sheets.length===1){state.selectedSheet=d.sheets[0];renderSheets();show("empFields");}
+      } else {
+        $("connectingMsg").textContent = "서버 오류: "+(d.error||"알 수 없음");
+      }
+    })
+    .catch(function(e){
+      $("connectingMsg").textContent = "서버 연결 실패 - URL을 확인해주세요";
+      console.error("연결 오류:", e);
+    });
 });
 
-function renderSheets() {
-  if(state.sheets.length===0) return;
+function renderSheets(){
+  if(state.sheets.length===0)return;
   show("sheetField");
-  $("sheetRow").innerHTML = state.sheets.map(s=>
-    `<button class="sheet-chip ${state.selectedSheet===s?"active":""}" onclick="selectSheet('${s}')">${s}</button>`
-  ).join("");
-}
-
-function selectSheet(name) {
-  state.selectedSheet = name;
-  renderSheets();
-  show("empFields");
-  checkEnterBtn();
-}
-
-function checkEnterBtn() {
-  state.empId = $("empIdInput").value.trim();
-  state.empName = $("empNameInput").value.trim();
-  if(state.empId && state.empName && state.selectedSheet) show("enterBtn");
-  else hide("enterBtn");
-}
-
-// ── 입장 ──
-async function handleEnter() {
-  if(!state.empId||!state.empName||!state.selectedSheet) return;
-  $("enterBtn").disabled = true;
-  $("enterBtn").textContent = "조회 중...";
-  hide("homeError");
-  try {
-    const d = await api({action:"enter", sheet:state.selectedSheet, empId:state.empId, name:state.empName});
-    if(d.success){
-      state.empData = d;
-      hide("homeScreen");
-      show("dashScreen");
-      renderDash();
-    } else {
-      $("homeError").textContent = d.error||"오류 발생";
-      show("homeError");
-    }
-  } catch(e) {
-    $("homeError").textContent = "서버 연결 실패";
-    show("homeError");
-  }
-  $("enterBtn").disabled = false;
-  $("enterBtn").textContent = "입장하기";
-}
-
-function goHome() {
-  state.empData = null;
-  hide("dashScreen");
-  show("homeScreen");
-}
-
-// ── 대시보드 렌더링 ──
-function renderDash() {
-  const ed = state.empData;
-  if(!ed) return;
-  $("dashName").textContent = ed.name;
-  $("dashId").textContent = ed.empId;
-  $("balValue").textContent = (ed.finalBalance||0).toFixed(1)+"h";
-  renderWeek();
-}
-
-function changeWeek(dir) {
-  const d = new Date(state.currentWeek);
-  d.setDate(d.getDate() + dir*7);
-  state.currentWeek = d;
-  renderWeek();
-}
-
-function renderWeek() {
-  const dates = getWeekDates(state.currentWeek);
-  const today = new Date();
-  const todayStr = fmt(today);
-
-  // 주간 범위
-  $("weekRange").textContent = `${dates[0].getMonth()+1}/${dates[0].getDate()} ~ ${dates[6].getMonth()+1}/${dates[6].getDate()}`;
-  const isThisWeek = fmt(dates[0])<=todayStr && todayStr<=fmt(dates[6]);
-  if(isThisWeek) show("thisBadge"); else hide("thisBadge");
-
-  // 주간 요약
-  let ot=0, hol=0, co=0, conv=0;
-  dates.forEach(d=>{
-    const e = getEntry(fmt(d));
-    if(e){ conv+=e.converted||0; if(e.workType==="연장근무")ot++; if(e.workType==="휴일근무")hol++; if(e.workType==="대체휴무")co++; }
-  });
-  $("sumRow").innerHTML = [
-    {n:ot,l:"연장",c:"#f59e0b"},{n:hol,l:"휴일",c:"#ef4444"},
-    {n:co,l:"대휴",c:"#22c55e"},{n:conv.toFixed(1),l:"환산h",c:"#6366f1"}
-  ].map(s=>`<div class="sum-item" style="border-left:3px solid ${s.c}"><div class="sum-num">${s.n}</div><div class="sum-label">${s.l}</div></div>`).join("");
-
-  // 캘린더
-  $("weekGrid").innerHTML = dates.map(d=>{
-    const ds = fmt(d);
-    const entry = getEntry(ds);
-    const isToday = todayStr===ds;
-    const wt = WORK_TYPES.find(w=>w.value===entry?.workType);
-    const isNormal = !entry || entry.workType==="정상퇴근" || entry.converted===0;
-    const isSun = d.getDay()===0, isSat = d.getDay()===6;
-    const dayColor = isSun?"#ef4444":isSat?"#3b82f6":"#475569";
-    const bgColor = isNormal?"#fff":(wt?.color||"#fff")+"08";
-
-    let body;
-    if(!isNormal){
-      body = `<div class="day-body">
-        <span class="type-tag" style="background:${wt.color}18;color:${wt.color}">${wt.icon} ${entry.workType.slice(0,2)}</span>
-        <span class="day-h">${entry.hours}h</span>
-        <span class="day-conv" style="color:${entry.converted>=0?"#6366f1":"#ef4444"}">${entry.converted>=0?"+":""}${entry.converted.toFixed(1)}</span>
-      </div>`;
-    } else {
-      body = `<div class="day-empty"><span class="day-plus">+</span></div>`;
-    }
-
-    return `<div class="day-card ${isToday?"today":""}" style="background:${bgColor}" onclick="openModal('${ds}',${d.getDay()},${d.getMonth()+1},${d.getDate()})">
-      <div style="color:${dayColor}">
-        <span class="day-name">${DAY_KR[d.getDay()]}</span>
-        <span class="day-num">${d.getDate()}</span>
-      </div>
-      ${body}
-    </div>`;
+  $("sheetRow").innerHTML=state.sheets.map(function(s){
+    return '<button class="sheet-chip '+(state.selectedSheet===s?"active":"")+'" onclick="selectSheet(\''+s+'\')">'+s+'</button>';
   }).join("");
 }
-
-function getEntry(ds) {
-  return state.empData?.entries?.find(e=>e.date===ds);
+function selectSheet(name){state.selectedSheet=name;renderSheets();show("empFields");checkEnterBtn();}
+function checkEnterBtn(){
+  state.empId=$("empIdInput").value.trim();
+  state.empName=$("empNameInput").value.trim();
+  if(state.empId&&state.empName&&state.selectedSheet)show("enterBtn");else hide("enterBtn");
 }
 
-// ── 모달 ──
-function openModal(dateStr, dayIdx, month, date) {
-  state.selectedDate = dateStr;
-  $("modalTitle").textContent = `${month}/${date}(${DAY_KR[dayIdx]}) 근태 입력`;
-
-  const entry = getEntry(dateStr);
-  const isNormal = !entry || entry.workType==="정상퇴근" || entry.converted===0;
-  state.workType = (!isNormal && entry) ? entry.workType : "연장근무";
-  state.hours = (!isNormal && entry) ? String(entry.hours||"") : "";
-
-  renderModal();
-  show("modal");
+function handleEnter(){
+  if(!state.empId||!state.empName||!state.selectedSheet)return;
+  $("enterBtn").disabled=true;$("enterBtn").textContent="조회 중...";hide("homeError");
+  api({action:"enter",sheet:state.selectedSheet,empId:state.empId,name:state.empName})
+    .then(function(d){
+      if(d.success){state.empData=d;hide("homeScreen");show("dashScreen");renderDash();}
+      else{$("homeError").textContent=d.error||"오류 발생";show("homeError");}
+    })
+    .catch(function(){$("homeError").textContent="서버 연결 실패";show("homeError");})
+    .finally(function(){$("enterBtn").disabled=false;$("enterBtn").textContent="입장하기";});
 }
+function goHome(){state.empData=null;hide("dashScreen");show("homeScreen");}
 
-function closeModal() { hide("modal"); hide("submitMsg"); }
+function renderDash(){
+  var ed=state.empData;if(!ed)return;
+  $("dashName").textContent=ed.name;
+  $("dashId").textContent=ed.empId;
+  $("balValue").textContent=(ed.finalBalance||0).toFixed(1)+"h";
+  renderWeek();
+}
+function changeWeek(dir){
+  var d=new Date(state.currentWeek);d.setDate(d.getDate()+dir*7);state.currentWeek=d;renderWeek();
+}
+function renderWeek(){
+  var dates=getWeekDates(state.currentWeek);
+  var today=new Date(),todayStr=fmt(today);
+  $("weekRange").textContent=(dates[0].getMonth()+1)+"/"+dates[0].getDate()+" ~ "+(dates[6].getMonth()+1)+"/"+dates[6].getDate();
+  var isThisWeek=fmt(dates[0])<=todayStr&&todayStr<=fmt(dates[6]);
+  if(isThisWeek)show("thisBadge");else hide("thisBadge");
 
-function selectType(val) {
-  state.workType = val;
-  if(val==="정상퇴근") state.hours="0";
-  else if(val==="대체휴무") state.hours="8";
+  var ot=0,hol=0,co=0,conv=0;
+  dates.forEach(function(d){
+    var e=getEntry(fmt(d));
+    if(e){conv+=e.converted||0;if(e.workType==="연장근무")ot++;if(e.workType==="휴일근무")hol++;if(e.workType==="대체휴무")co++;}
+  });
+  $("sumRow").innerHTML=[
+    {n:ot,l:"연장",c:"#f59e0b"},{n:hol,l:"휴일",c:"#ef4444"},
+    {n:co,l:"대휴",c:"#22c55e"},{n:conv.toFixed(1),l:"환산h",c:"#6366f1"}
+  ].map(function(s){return '<div class="sum-item" style="border-left:3px solid '+s.c+'"><div class="sum-num">'+s.n+'</div><div class="sum-label">'+s.l+'</div></div>';}).join("");
+
+  $("weekGrid").innerHTML=dates.map(function(d){
+    var ds=fmt(d),entry=getEntry(ds),isToday=todayStr===ds;
+    var wt=WORK_TYPES.find(function(w){return w.value===(entry&&entry.workType);});
+    var isNormal=!entry||entry.workType==="정상퇴근"||entry.converted===0;
+    var isSun=d.getDay()===0,isSat=d.getDay()===6;
+    var dayColor=isSun?"#ef4444":isSat?"#3b82f6":"#475569";
+    var bgColor=isNormal?"#fff":(wt?wt.color:"#fff")+"08";
+    var body;
+    if(!isNormal&&wt){
+      body='<div class="day-body"><span class="type-tag" style="background:'+wt.color+'18;color:'+wt.color+'">'+wt.icon+" "+entry.workType.slice(0,2)+'</span><span class="day-h">'+entry.hours+'h</span><span class="day-conv" style="color:'+(entry.converted>=0?"#6366f1":"#ef4444")+'">'+(entry.converted>=0?"+":"")+entry.converted.toFixed(1)+'</span></div>';
+    }else{
+      body='<div class="day-empty"><span class="day-plus">+</span></div>';
+    }
+    return '<div class="day-card '+(isToday?"today":"")+'" style="background:'+bgColor+'" onclick="openModal(\''+ds+'\','+d.getDay()+','+(d.getMonth()+1)+','+d.getDate()+')"><div style="color:'+dayColor+'"><span class="day-name">'+DAY_KR[d.getDay()]+'</span><span class="day-num">'+d.getDate()+'</span></div>'+body+'</div>';
+  }).join("");
+}
+function getEntry(ds){return state.empData&&state.empData.entries?state.empData.entries.find(function(e){return e.date===ds;}):null;}
+
+function openModal(dateStr,dayIdx,month,date){
+  state.selectedDate=dateStr;
+  $("modalTitle").textContent=month+"/"+date+"("+DAY_KR[dayIdx]+") 근태 입력";
+  var entry=getEntry(dateStr);
+  var isNormal=!entry||entry.workType==="정상퇴근"||entry.converted===0;
+  state.workType=(!isNormal&&entry)?entry.workType:"연장근무";
+  state.hours=(!isNormal&&entry)?String(entry.hours||""):"";
+  renderModal();show("modal");
+}
+function closeModal(){hide("modal");hide("submitMsg");}
+
+function selectType(val){
+  state.workType=val;
+  if(val==="정상퇴근")state.hours="0";
+  else if(val==="대체휴무")state.hours="8";
   else state.hours="";
   renderModal();
 }
+function selectHour(h){state.hours=String(h);renderModal();}
 
-function selectHour(h) {
-  state.hours = String(h);
-  renderModal();
-}
-
-function renderModal() {
-  // 근무형태 버튼
-  $("typeGrid").innerHTML = WORK_TYPES.map(wt=>{
-    const active = state.workType===wt.value;
-    return `<button class="type-opt ${active?"active":""}" style="border:${active?`2px solid ${wt.color}`:"1px solid #e2e8f0"};background:${active?wt.color+"10":"#fff"}" onclick="selectType('${wt.value}')">
-      <span class="icon">${wt.icon}</span>
-      <span class="name" style="color:${active?wt.color:"#64748b"}">${wt.label}</span>
-      <span class="desc">${wt.desc}</span>
-    </button>`;
+function renderModal(){
+  $("typeGrid").innerHTML=WORK_TYPES.map(function(wt){
+    var active=state.workType===wt.value;
+    return '<button class="type-opt'+(active?" active":"")+'" style="border:'+(active?"2px solid "+wt.color:"1px solid #e2e8f0")+';background:'+(active?wt.color+"10":"#fff")+'" onclick="selectType(\''+wt.value+'\')"><span class="icon">'+wt.icon+'</span><span class="name" style="color:'+(active?wt.color:"#64748b")+'">'+wt.label+'</span><span class="desc">'+wt.desc+'</span></button>';
   }).join("");
 
-  // 시간 입력
   if(state.workType!=="정상퇴근"){
     show("hoursSection");
-    $("hoursLabel").textContent = state.workType==="대체휴무" ? "사용 시간" : "초과근무 시간";
-    $("chipRow").innerHTML = [1,2,3,4,5,6,7,8].map(h=>
-      `<button class="chip ${state.hours===String(h)?"active":""}" onclick="selectHour(${h})">${h}</button>`
-    ).join("");
-    $("hourInput").value = state.hours;
-  } else {
-    hide("hoursSection");
-  }
-
+    $("hoursLabel").textContent=state.workType==="대체휴무"?"사용 시간":"초과근무 시간";
+    $("chipRow").innerHTML=[1,2,3,4,5,6,7,8].map(function(h){
+      return '<button class="chip'+(state.hours===String(h)?" active":"")+'" onclick="selectHour('+h+')">'+h+'</button>';
+    }).join("");
+    $("hourInput").value=state.hours;
+  }else{hide("hoursSection");}
   updatePreview();
 }
 
-function updatePreview() {
-  state.hours = $("hourInput")?.value || state.hours;
-  if(state.hours || state.workType==="정상퇴근"){
+function updatePreview(){
+  var h=$("hourInput")?$("hourInput").value:state.hours;
+  if(h)state.hours=h;
+  if(state.hours||state.workType==="정상퇴근"){
     show("previewBox");
-    const cv = calcConv(state.workType, state.hours||0);
-    $("previewValue").textContent = `${cv>=0?"+":""}${cv.toFixed(1)}h`;
-    $("previewValue").style.color = cv>=0?"#6366f1":"#ef4444";
-    $("submitBtn").disabled = false;
-    $("submitBtn").style.opacity = "1";
-  } else {
-    hide("previewBox");
-    $("submitBtn").disabled = true;
-    $("submitBtn").style.opacity = "0.4";
+    var cv=calcConv(state.workType,state.hours||0);
+    $("previewValue").textContent=(cv>=0?"+":"")+cv.toFixed(1)+"h";
+    $("previewValue").style.color=cv>=0?"#6366f1":"#ef4444";
+    $("submitBtn").disabled=false;$("submitBtn").style.opacity="1";
+  }else{
+    hide("previewBox");$("submitBtn").disabled=true;$("submitBtn").style.opacity="0.4";
   }
 }
 
-// ── 저장 ──
-async function handleSubmit() {
-  if(!state.selectedDate) return;
-  const hrs = state.workType==="정상퇴근" ? "0" : state.hours;
-  if(!hrs && state.workType!=="정상퇴근") return;
+function handleSubmit(){
+  if(!state.selectedDate)return;
+  var hrs=state.workType==="정상퇴근"?"0":state.hours;
+  if(!hrs&&state.workType!=="정상퇴근")return;
+  $("submitBtn").disabled=true;$("submitBtn").textContent="저장 중...";hide("submitMsg");
 
-  $("submitBtn").disabled = true;
-  $("submitBtn").textContent = "저장 중...";
-  hide("submitMsg");
-
-  try {
-    const d = await api({
-      action:"submitEntry", sheet:state.selectedSheet, empId:state.empData.empId,
-      date:state.selectedDate, workType:state.workType, hours:hrs,
-    });
-    if(d.success){
-      const msg = $("submitMsg");
-      msg.className = "submit-msg ok";
-      msg.textContent = `✓ 저장완료 | 환산: ${d.converted>=0?"+":""}${d.converted}h | 잔여: ${d.finalBalance}h`;
-      show("submitMsg");
-      await refreshData();
-      setTimeout(closeModal, 1800);
-    } else {
-      const msg = $("submitMsg");
-      msg.className = "submit-msg err";
-      msg.textContent = "⚠ "+(d.error||"저장 실패");
-      show("submitMsg");
-    }
-  } catch(e) {
-    const msg = $("submitMsg");
-    msg.className = "submit-msg err";
-    msg.textContent = "⚠ 서버 연결 실패";
-    show("submitMsg");
-  }
-  $("submitBtn").disabled = false;
-  $("submitBtn").textContent = "저장하기";
+  api({action:"submitEntry",sheet:state.selectedSheet,empId:state.empData.empId,date:state.selectedDate,workType:state.workType,hours:hrs})
+    .then(function(d){
+      var msg=$("submitMsg");
+      if(d.success){
+        msg.className="submit-msg ok";
+        msg.textContent="저장완료 | 환산: "+(d.converted>=0?"+":"")+d.converted+"h | 잔여: "+d.finalBalance+"h";
+        show("submitMsg");
+        refreshData();
+        setTimeout(closeModal,1800);
+      }else{
+        msg.className="submit-msg err";msg.textContent="오류: "+(d.error||"저장 실패");show("submitMsg");
+      }
+    })
+    .catch(function(){
+      var msg=$("submitMsg");msg.className="submit-msg err";msg.textContent="서버 연결 실패";show("submitMsg");
+    })
+    .finally(function(){$("submitBtn").disabled=false;$("submitBtn").textContent="저장하기";});
 }
 
-async function refreshData() {
-  if(!state.empData) return;
-  try {
-    const d = await api({action:"enter", sheet:state.selectedSheet, empId:state.empData.empId, name:state.empData.name});
-    if(d.success){ state.empData=d; renderDash(); }
-  } catch(e){}
+function refreshData(){
+  if(!state.empData)return;
+  api({action:"enter",sheet:state.selectedSheet,empId:state.empData.empId,name:state.empData.name})
+    .then(function(d){if(d.success){state.empData=d;renderDash();}})
+    .catch(function(){});
 }
 </script>
 </body>
