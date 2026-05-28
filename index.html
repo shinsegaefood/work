@@ -173,6 +173,13 @@ body {
 }
 .hidden { display:none !important; }
 .connecting { color:#94a3b8; font-size:14px; padding:10px 0; }
+.notice-banner {
+  margin:8px 12px 0; padding:14px 18px; border-radius:12px;
+  background:linear-gradient(135deg,#fef3c7,#fef9c3); border:1px solid #fde68a;
+  font-size:13px; font-weight:600; color:#92400e; line-height:1.6;
+  white-space:pre-wrap;
+}
+.notice-banner::before { content:"📢 "; }
 </style>
 </head>
 <body>
@@ -213,9 +220,15 @@ body {
         <span id="dashId" class="h-id"></span>
       </div>
     </div>
-    <div class="bal-badge">
-      <span class="bal-label">잔여</span>
-      <span id="balValue" class="bal-value">0.0h</span>
+    <div style="display:flex;gap:8px">
+      <div class="bal-badge" style="background:#f1f5f9">
+        <span class="bal-label" style="color:#94a3b8">과거적치</span>
+        <span id="pastValue" class="bal-value" style="color:#475569;font-size:15px">0h</span>
+      </div>
+      <div class="bal-badge">
+        <span class="bal-label">잔여</span>
+        <span id="balValue" class="bal-value">0.0h</span>
+      </div>
     </div>
   </div>
   <div class="week-nav">
@@ -228,6 +241,7 @@ body {
   </div>
   <div id="sumRow" class="sum-row"></div>
   <div id="weekGrid" class="week-grid"></div>
+  <div id="noticeBanner" class="notice-banner hidden"></div>
   <div class="footer">
     <button class="refresh-btn" onclick="refreshData()">🔄 새로고침</button>
   </div>
@@ -369,6 +383,14 @@ function renderDash(){
   $("dashName").textContent=ed.name;
   $("dashId").textContent=ed.empId;
   $("balValue").textContent=(ed.finalBalance||0).toFixed(1)+"h";
+  $("pastValue").textContent=(ed.pastHours||0)+"h";
+  // 공지사항
+  if(ed.notice){
+    $("noticeBanner").textContent=ed.notice;
+    show("noticeBanner");
+  }else{
+    hide("noticeBanner");
+  }
   renderWeek();
 }
 function changeWeek(dir){
