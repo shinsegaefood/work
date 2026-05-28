@@ -266,7 +266,6 @@ var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwl4ndyWgjfAjwgV6Qql3
 
 
 var WORK_TYPES = [
-  { value:"정상퇴근", label:"정상퇴근", color:"#64748b", icon:"\uD83C\uDFE0", desc:"기본 근무" },
   { value:"연장근무", label:"연장근무", color:"#f59e0b", icon:"\u23F0", desc:"\u00D71.5 환산" },
   { value:"휴일근무", label:"휴일근무", color:"#ef4444", icon:"\uD83D\uDCC5", desc:"8h+초과\u00D71.5" },
   { value:"대체휴무", label:"대체휴무", color:"#22c55e", icon:"\uD83C\uDF34", desc:"잔여 차감" }
@@ -395,7 +394,7 @@ function renderWeek(){
   $("weekGrid").innerHTML=dates.map(function(d){
     var ds=fmt(d),entry=getEntry(ds),isToday=todayStr===ds;
     var wt=WORK_TYPES.find(function(w){return w.value===(entry&&entry.workType);});
-    var isNormal=!entry||entry.workType==="정상퇴근"||entry.converted===0;
+    var isNormal=!entry||entry.converted===0;
     var isSun=d.getDay()===0,isSat=d.getDay()===6;
     var dayColor=isSun?"#ef4444":isSat?"#3b82f6":"#475569";
     var bgColor=isNormal?"#fff":(wt?wt.color:"#fff")+"08";
@@ -414,7 +413,7 @@ function openModal(dateStr,dayIdx,month,date){
   state.selectedDate=dateStr;
   $("modalTitle").textContent=month+"/"+date+"("+DAY_KR[dayIdx]+") 근태 입력";
   var entry=getEntry(dateStr);
-  var isNormal=!entry||entry.workType==="정상퇴근"||entry.converted===0;
+  var isNormal=!entry||entry.converted===0;
   state.workType=(!isNormal&&entry)?entry.workType:"연장근무";
   state.hours=(!isNormal&&entry)?String(entry.hours||""):"";
   renderModal();show("modal");
@@ -423,8 +422,7 @@ function closeModal(){hide("modal");hide("submitMsg");}
 
 function selectType(val){
   state.workType=val;
-  if(val==="정상퇴근")state.hours="0";
-  else if(val==="대체휴무")state.hours="8";
+  if(val==="대체휴무")state.hours="8";
   else state.hours="";
   renderModal();
 }
@@ -436,21 +434,19 @@ function renderModal(){
     return '<button class="type-opt'+(active?" active":"")+'" style="border:'+(active?"2px solid "+wt.color:"1px solid #e2e8f0")+';background:'+(active?wt.color+"10":"#fff")+'" onclick="selectType(\''+wt.value+'\')"><span class="icon">'+wt.icon+'</span><span class="name" style="color:'+(active?wt.color:"#64748b")+'">'+wt.label+'</span><span class="desc">'+wt.desc+'</span></button>';
   }).join("");
 
-  if(state.workType!=="정상퇴근"){
-    show("hoursSection");
-    $("hoursLabel").textContent=state.workType==="대체휴무"?"사용 시간":"초과근무 시간";
-    $("chipRow").innerHTML=[1,2,3,4,5,6,7,8].map(function(h){
-      return '<button class="chip'+(state.hours===String(h)?" active":"")+'" onclick="selectHour('+h+')">'+h+'</button>';
-    }).join("");
-    $("hourInput").value=state.hours;
-  }else{hide("hoursSection");}
+  show("hoursSection");
+  $("hoursLabel").textContent=state.workType==="대체휴무"?"사용 시간":"초과근무 시간";
+  $("chipRow").innerHTML=[1,2,3,4,5,6,7,8].map(function(h){
+    return '<button class="chip'+(state.hours===String(h)?" active":"")+'" onclick="selectHour('+h+')">'+h+'</button>';
+  }).join("");
+  $("hourInput").value=state.hours;
   updatePreview();
 }
 
 function updatePreview(){
   var h=$("hourInput")?$("hourInput").value:state.hours;
   if(h)state.hours=h;
-  if(state.hours||state.workType==="정상퇴근"){
+  if(state.hours){
     show("previewBox");
     var cv=calcConv(state.workType,state.hours||0);
     $("previewValue").textContent=(cv>=0?"+":"")+cv.toFixed(1)+"h";
@@ -463,8 +459,8 @@ function updatePreview(){
 
 function handleSubmit(){
   if(!state.selectedDate)return;
-  var hrs=state.workType==="정상퇴근"?"0":state.hours;
-  if(!hrs&&state.workType!=="정상퇴근")return;
+  var hrs=state.hours;
+  if(!hrs)return;
   $("submitBtn").disabled=true;$("submitBtn").textContent="저장 중...";hide("submitMsg");
 
   api({action:"submitEntry",sheet:state.selectedSheet,empId:state.empData.empId,date:state.selectedDate,workType:state.workType,hours:hrs})
