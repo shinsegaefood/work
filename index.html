@@ -220,12 +220,16 @@ body {
         <span id="dashId" class="h-id"></span>
       </div>
     </div>
-    <div style="display:flex;gap:8px">
-      <div class="bal-badge" style="background:#f1f5f9">
-        <span class="bal-label" style="color:#94a3b8">과거적치</span>
-        <span id="pastValue" class="bal-value" style="color:#475569;font-size:15px">0h</span>
+    <div style="display:flex;gap:6px">
+      <div class="bal-badge" style="background:#f1f5f9;padding:6px 10px">
+        <span class="bal-label" style="color:#94a3b8">1~4월</span>
+        <span id="pastValue" class="bal-value" style="color:#475569;font-size:14px">0h</span>
       </div>
-      <div class="bal-badge">
+      <div class="bal-badge" style="background:#f1f5f9;padding:6px 10px">
+        <span class="bal-label" style="color:#94a3b8">올해</span>
+        <span id="monthValue" class="bal-value" style="color:#475569;font-size:14px">0h</span>
+      </div>
+      <div class="bal-badge" style="padding:6px 14px">
         <span class="bal-label">잔여</span>
         <span id="balValue" class="bal-value">0.0h</span>
       </div>
@@ -382,8 +386,12 @@ function renderDash(){
   var ed=state.empData;if(!ed)return;
   $("dashName").textContent=ed.name;
   $("dashId").textContent=ed.empId;
-  $("balValue").textContent=(ed.finalBalance||0).toFixed(1)+"h";
-  $("pastValue").textContent=(ed.pastHours||0)+"h";
+  var past=ed.pastHours||0;
+  var monthly=ed.finalBalance-past;
+  $("pastValue").textContent=past+"h";
+  $("monthValue").textContent=(monthly>=0?"+":"")+monthly.toFixed(1)+"h";
+  $("monthValue").style.color=monthly>=0?"#475569":"#ef4444";
+  $("balValue").textContent=ed.finalBalance.toFixed(1)+"h";
   // 공지사항
   if(ed.notice){
     $("noticeBanner").textContent=ed.notice;
@@ -458,7 +466,7 @@ function renderModal(){
 
   show("hoursSection");
   $("hoursLabel").textContent=state.workType==="대체휴무"?"사용 시간":"초과근무 시간";
-  $("chipRow").innerHTML=[1,2,3,4,5,6,7,8,9,10,11,12].map(function(h){
+  $("chipRow").innerHTML=[1,2,3,4,5,6,7,8].map(function(h){
     return '<button class="chip'+(state.hours===String(h)?" active":"")+'" onclick="selectHour('+h+')">'+h+'</button>';
   }).join("");
   $("hourInput").value=state.hours;
