@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>보상휴가 현황</title>
+<title>대체휴무 관리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -37,7 +37,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
 .month-label{font-size:18px;font-weight:800;color:#1e293b}
 .this-badge{font-size:10px;background:#dbeafe;color:#3b82f6;padding:2px 8px;border-radius:6px;font-weight:700;margin-left:8px}
 
-.sum-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid #f1f5f9}
+.sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid #f1f5f9}
 .sum-item{padding:10px 8px;background:#f8fafc;border-radius:10px;text-align:center}
 .sum-num{font-size:20px;font-weight:800}
 .sum-label{font-size:11px;color:#94a3b8;font-weight:600;margin-top:2px}
@@ -87,9 +87,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
 <body>
 
 <div id="homeScreen" class="bg"><div class="card">
-  <div class="logo">🌸</div>
-  <h1 class="app-title">보상휴가 관리</h1>
-  <p class="app-sub">보상휴가 사용현황</p>
+  <div class="logo">🌴</div>
+  <h1 class="app-title">대체휴무 관리</h1>
+  <p class="app-sub">적치시간 차감 관리</p>
   <p id="connectingMsg" class="connecting">연결 중...</p>
   <div id="sheetField" class="field hidden">
     <label>월 선택</label>
@@ -109,7 +109,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
       <button class="back-btn" onclick="goHome()">←</button>
       <div><span id="dashName" class="h-name"></span><span id="dashId" class="h-id"></span></div>
     </div>
-    <button class="refresh-btn" onclick="refreshData()">새로고침🔄</button>
+    <button class="refresh-btn" onclick="refreshData()">🔄</button>
   </div>
   <div id="sumRow" class="sum-row"></div>
   <div class="month-nav">
@@ -129,14 +129,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
       <h3 id="modalTitle" class="modal-title"></h3>
       <button class="close-btn" onclick="closeModal()">✕</button>
     </div>
-    <label style="font-size:13px;font-weight:600;color:#475569;display:block;margin-bottom:10px">🌴 보상휴가 시간</label>
+    <label style="font-size:13px;font-weight:600;color:#475569;display:block;margin-bottom:10px">🌴 대체휴무 시간</label>
     <div class="chip-row" id="chipRow"></div>
     <div class="hour-row">
       <input id="hourInput" class="hour-input" type="number" inputmode="decimal" step="0.5" placeholder="직접 입력">
       <span class="hour-unit">시간</span>
     </div>
     <div id="submitMsg" class="submit-msg hidden"></div>
-    <button id="submitBtn" class="btn-leave" onclick="handleSubmit()">보상휴가 등록</button>
+    <button id="submitBtn" class="btn-leave" onclick="handleSubmit()">대휴 등록</button>
     <button id="deleteBtn" class="btn-delete hidden" onclick="handleDelete()">등록 취소</button>
   </div>
 </div>
@@ -217,11 +217,11 @@ function renderMonth(){
   if(isThisMonth)show("thisBadge");else hide("thisBadge");
 
   // 월간 요약
-  var usedThisMonth=0,leaveCount=0;
+  var usedThisMonth=0;
   if(state.empData&&state.empData.entries){
     state.empData.entries.forEach(function(e){
       var ed=new Date(e.date);
-      if(ed.getFullYear()===y&&ed.getMonth()===m&&e.hours>0){usedThisMonth+=e.hours;leaveCount++;}
+      if(ed.getFullYear()===y&&ed.getMonth()===m&&e.hours>0){usedThisMonth+=e.hours;}
     });
   }
   var past=state.empData?state.empData.pastHours||0:0;
@@ -229,7 +229,6 @@ function renderMonth(){
   $("sumRow").innerHTML=[
     {n:past+"h",l:"적치",c:"#64748b"},
     {n:remain.toFixed(1)+"h",l:"잔여",c:"#6366f1"},
-    {n:leaveCount+"일",l:"보상휴가일수",c:"#22c55e"},
     {n:usedThisMonth.toFixed(1)+"h",l:"사용시간",c:"#f59e0b"}
   ].map(function(s){return '<div class="sum-item" style="border-left:3px solid '+s.c+'"><div class="sum-num">'+s.n+'</div><div class="sum-label">'+s.l+'</div></div>';}).join("");
 
@@ -267,7 +266,7 @@ function openModal(ds){
   state.selectedDate=ds;
   var parts=ds.split("-");
   var d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
-  $("modalTitle").textContent=(d.getMonth()+1)+"/"+d.getDate()+"("+DAY_KR[d.getDay()]+") 보상휴가 등록";
+  $("modalTitle").textContent=(d.getMonth()+1)+"/"+d.getDate()+"("+DAY_KR[d.getDay()]+") 대휴 등록";
   var entry=getEntry(ds);
   state.hours=entry&&entry.hours>0?String(entry.hours):"8";
   $("hourInput").value=state.hours;
@@ -287,13 +286,25 @@ function pickHour(h){state.hours=String(h);$("hourInput").value=h;updateChips();
 
 function handleSubmit(){
   if(!state.selectedDate||!state.hours)return;
+  // 잔여 초과 체크
+  var h=parseFloat(state.hours)||0;
+  var currentEntry=getEntry(state.selectedDate);
+  var currentHours=(currentEntry&&currentEntry.hours>0)?currentEntry.hours:0;
+  var newRemaining=(state.empData.remaining||0)+currentHours-h;
+  if(newRemaining<0){
+    var msg=$("submitMsg");
+    msg.className="submit-msg err";
+    msg.textContent="잔여시간이 부족합니다. 사용 가능 시간: "+(state.empData.remaining+currentHours).toFixed(1)+"h";
+    show("submitMsg");
+    return;
+  }
   $("submitBtn").disabled=true;$("submitBtn").textContent="저장 중...";hide("submitMsg");
   api({action:"submitEntry",sheet:state.selectedSheet,empId:state.empData.empId,date:state.selectedDate,hours:state.hours}).then(function(d){
     var msg=$("submitMsg");
     if(d.success){msg.className="submit-msg ok";msg.textContent="✓ 등록완료 | 잔여: "+d.remaining.toFixed(1)+"h";show("submitMsg");refreshData();setTimeout(closeModal,1500);}
     else{msg.className="submit-msg err";msg.textContent="⚠ "+(d.error||"저장 실패");show("submitMsg");}
   }).catch(function(){var msg=$("submitMsg");msg.className="submit-msg err";msg.textContent="⚠ 서버 연결 실패";show("submitMsg");})
-  .finally(function(){$("submitBtn").disabled=false;$("submitBtn").textContent="보상휴가 등록";});
+  .finally(function(){$("submitBtn").disabled=false;$("submitBtn").textContent="대휴 등록";});
 }
 
 function handleDelete(){
