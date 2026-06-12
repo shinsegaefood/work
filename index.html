@@ -284,19 +284,7 @@ function pickHour(h){state.hours=String(h);$("hourInput").value=h;updateChips();
 
 function handleSubmit(){
   if(!state.selectedDate||!state.hours)return;
-  // 잔여 초과 체크
-  var h=parseFloat(state.hours)||0;
-  var currentEntry=getEntry(state.selectedDate);
-  var currentHours=(currentEntry&&currentEntry.hours>0)?currentEntry.hours:0;
-  var newRemaining=(state.empData.remaining||0)+currentHours-h;
-  if(newRemaining<0){
-    var msg=$("submitMsg");
-    msg.className="submit-msg err";
-    msg.textContent="잔여시간이 부족합니다. 사용 가능 시간: "+(state.empData.remaining+currentHours).toFixed(1)+"h";
-    show("submitMsg");
-    return;
-  }
-  $("submitBtn").disabled=true;$("submitBtn").textContent="저장 중...";hide("submitMsg");
+   $("submitBtn").disabled=true;$("submitBtn").textContent="저장 중...";hide("submitMsg");
   api({action:"submitEntry",sheet:state.selectedSheet,empId:state.empData.empId,date:state.selectedDate,hours:state.hours}).then(function(d){
     var msg=$("submitMsg");
     if(d.success){msg.className="submit-msg ok";msg.textContent="✓ 등록완료 | 잔여: "+d.remaining.toFixed(1)+"h";show("submitMsg");refreshData();setTimeout(closeModal,1500);}
