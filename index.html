@@ -38,16 +38,25 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
 .sum-label{font-size:11px;color:#94a3b8;font-weight:600;margin-top:2px}
 
 /* 적치 상세 펼침 */
-.past-toggle{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#94a3b8;user-select:none;border-bottom:1px solid #f1f5f9}
-.past-toggle:hover{color:#6366f1}
-.past-toggle .arrow{transition:transform 0.2s;display:inline-block}
-.past-toggle.open .arrow{transform:rotate(180deg)}
-.past-detail{overflow:hidden;max-height:0;transition:max-height 0.3s ease;background:#fff}
-.past-detail.open{max-height:200px}
-.past-grid{display:flex;gap:6px;padding:4px 16px 12px;flex-wrap:wrap}
-.past-chip{padding:8px 14px;background:#f1f5f9;border-radius:8px;text-align:center;min-width:70px}
-.past-chip .pc-val{font-size:15px;font-weight:800;color:#475569}
-.past-chip .pc-label{font-size:10px;color:#94a3b8;font-weight:600;margin-top:2px}
+.detail-toggle{margin:8px 16px 0;padding:12px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:#6366f1;user-select:none}
+.detail-toggle:hover{background:#f8fafc}
+.detail-toggle .arrow{transition:transform 0.2s;display:inline-block;font-size:11px}
+.detail-toggle.open .arrow{transform:rotate(180deg)}
+.detail-panel{overflow:hidden;max-height:0;transition:max-height 0.3s ease;margin:0 16px}
+.detail-panel.open{max-height:300px}
+.detail-inner{padding:10px 0 6px}
+.detail-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.detail-row-label{font-size:12px;font-weight:700;color:#94a3b8;min-width:36px;text-align:right}
+.detail-chips{display:flex;gap:5px;flex-wrap:wrap}
+.detail-chip{padding:6px 12px;border-radius:8px;text-align:center;min-width:62px}
+.detail-chip .dc-val{font-size:14px;font-weight:800}
+.detail-chip .dc-label{font-size:9px;font-weight:600;margin-top:1px}
+.chip-past{background:#f1f5f9}
+.chip-past .dc-val{color:#475569}
+.chip-past .dc-label{color:#94a3b8}
+.chip-used{background:#fef3c7}
+.chip-used .dc-val{color:#92400e}
+.chip-used .dc-label{color:#b45309}
 
 .month-nav{display:flex;align-items:center;justify-content:center;gap:16px;padding:14px 20px;background:#fff}
 .month-arrow{width:36px;height:36px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#475569;font-family:inherit}
@@ -120,11 +129,11 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
     <button class="refresh-btn" onclick="refreshData()">🔄</button>
   </div>
   <div id="sumRow" class="sum-row"></div>
-  <div id="pastToggle" class="past-toggle hidden" onclick="togglePast()">
-    <span>적치 상세</span><span class="arrow">▼</span>
+  <div id="detailToggle" class="detail-toggle hidden" onclick="toggleDetail()">
+    <span>📋 상세 보기</span><span class="arrow">▼</span>
   </div>
-  <div id="pastDetail" class="past-detail">
-    <div id="pastGrid" class="past-grid"></div>
+  <div id="detailPanel" class="detail-panel">
+    <div class="detail-inner" id="detailInner"></div>
   </div>
   <div class="month-nav">
     <button class="month-arrow" onclick="changeMonth(-1)">‹</button>
@@ -210,25 +219,57 @@ function renderDash(){
   $("dashName").textContent=ed.name;
   $("dashId").textContent=ed.empId;
   if(ed.notice){$("noticeBanner").textContent=ed.notice;show("noticeBanner");}else{hide("noticeBanner");}
-  // 적치 상세
-  if(ed.pastItems&&ed.pastItems.length>1){
-    show("pastToggle");
-    $("pastGrid").innerHTML=ed.pastItems.map(function(p){
-      return '<div class="past-chip"><div class="pc-val">'+p.hours+'h</div><div class="pc-label">'+p.label+'</div></div>';
-    }).join("");
+
+  // 상세 패널: 적치 + 사용 월별
+  var hasPastDetail=ed.pastItems&&ed.pastItems.length>1;
+  // 월별 사용시간 계산
+  var monthlyUsed={};
+  if(ed.entries){
+    ed.entries.forEach(function(e){
+      if(e.hours>0){
+        var mk=e.date.substring(0,7);
+        var mNum=parseInt(mk.split("-")[1]);
+        var label=mNum+"월";
+        if(!monthlyUsed[label])monthlyUsed[label]=0;
+        monthlyUsed[label]+=e.hours;
+      }
+    });
+  }
+  var hasUsedDetail=Object.keys(monthlyUsed).length>0;
+
+  if(hasPastDetail||hasUsedDetail){
+    show("detailToggle");
+    var html="";
+    // 적치 행
+    if(hasPastDetail){
+      html+='<div class="detail-row"><span class="detail-row-label">적치</span><div class="detail-chips">';
+      ed.pastItems.forEach(function(p){
+        html+='<div class="detail-chip chip-past"><div class="dc-val">'+p.hours+'h</div><div class="dc-label">'+p.label+'</div></div>';
+      });
+      html+='</div></div>';
+    }
+    // 사용 행
+    if(hasUsedDetail){
+      html+='<div class="detail-row"><span class="detail-row-label">사용</span><div class="detail-chips">';
+      Object.keys(monthlyUsed).sort().forEach(function(label){
+        html+='<div class="detail-chip chip-used"><div class="dc-val">'+monthlyUsed[label].toFixed(1)+'h</div><div class="dc-label">'+label+'</div></div>';
+      });
+      html+='</div></div>';
+    }
+    $("detailInner").innerHTML=html;
   }else{
-    hide("pastToggle");
-    $("pastDetail").classList.remove("open");
+    hide("detailToggle");
+    $("detailPanel").classList.remove("open");
   }
   renderMonth();
 }
 
-function togglePast(){
+function toggleDetail(){
   state.pastOpen=!state.pastOpen;
-  var toggle=$("pastToggle");
-  var detail=$("pastDetail");
-  if(state.pastOpen){toggle.classList.add("open");detail.classList.add("open");}
-  else{toggle.classList.remove("open");detail.classList.remove("open");}
+  var toggle=$("detailToggle");
+  var panel=$("detailPanel");
+  if(state.pastOpen){toggle.classList.add("open");panel.classList.add("open");}
+  else{toggle.classList.remove("open");panel.classList.remove("open");}
 }
 
 function changeMonth(dir){
