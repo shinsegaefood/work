@@ -299,7 +299,7 @@ function renderMonth(){
   $("sumRow").innerHTML=[
     {n:tp+"h",l:"총 적치",c:"#64748b"},
     {n:remain.toFixed(1)+"h",l:"잔여",c:"#6366f1"},
-    {n:usedThisMonth.toFixed(1)+"h",l:"사용시간",c:"#f59e0b"}
+    {n:usedThisMonth.toFixed(1)+"h",l:"당월 사용시간",c:"#f59e0b"}
   ].map(function(s){return '<div class="sum-item" style="border-left:3px solid '+s.c+'"><div class="sum-num">'+s.n+'</div><div class="sum-label">'+s.l+'</div></div>';}).join("");
 
   var firstDay=new Date(y,m,1).getDay();
