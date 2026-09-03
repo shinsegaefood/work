@@ -57,6 +57,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
 .chip-used{background:#fef3c7}
 .chip-used .dc-val{color:#92400e}
 .chip-used .dc-label{color:#b45309}
+.chip-extra{background:#fee2e2}
+.chip-extra .dc-val{color:#991b1b}
+.chip-extra .dc-label{color:#dc2626}
 
 .month-nav{display:flex;align-items:center;justify-content:center;gap:16px;padding:14px 20px;background:#fff}
 .month-arrow{width:36px;height:36px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#475569;font-family:inherit}
@@ -130,7 +133,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
   </div>
   <div id="sumRow" class="sum-row"></div>
   <div id="detailToggle" class="detail-toggle hidden" onclick="toggleDetail()">
-    <span>📋 적치/사용 상세보기</span><span class="arrow">▼</span>
+    <span>📋 상세 보기</span><span class="arrow">▼</span>
   </div>
   <div id="detailPanel" class="detail-panel">
     <div class="detail-inner" id="detailInner"></div>
@@ -168,7 +171,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  ↓↓↓ 아래 URL만 수정하세요 (따옴표 안에 붙여넣기) ↓↓↓      ║
 // ╚══════════════════════════════════════════════════════════════╝
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwl4ndyWgjfAjwgV6Qql39mx2OZo_mk-q8Ekpg_hIA6GmmwXVFVuaqk4-K-LTGJ4Fz5g/exec";
+var SCRIPT_URL = "여기에_URL_붙여넣기";
 
 
 var DAY_KR=["일","월","화","수","목","금","토"];
@@ -236,8 +239,9 @@ function renderDash(){
     });
   }
   var hasUsedDetail=Object.keys(monthlyUsed).length>0;
+  var hasExtraDetail=ed.extraItems&&ed.extraItems.length>0&&ed.extraItems.some(function(p){return p.hours>0;});
 
-  if(hasPastDetail||hasUsedDetail){
+  if(hasPastDetail||hasUsedDetail||hasExtraDetail){
     show("detailToggle");
     var html="";
     // 적치 행
@@ -253,6 +257,14 @@ function renderDash(){
       html+='<div class="detail-row"><span class="detail-row-label">사용</span><div class="detail-chips">';
       Object.keys(monthlyUsed).sort().forEach(function(label){
         html+='<div class="detail-chip chip-used"><div class="dc-val">'+monthlyUsed[label].toFixed(1)+'h</div><div class="dc-label">'+label+'</div></div>';
+      });
+      html+='</div></div>';
+    }
+    // 추가사용 행
+    if(hasExtraDetail){
+      html+='<div class="detail-row"><span class="detail-row-label">추가</span><div class="detail-chips">';
+      ed.extraItems.forEach(function(p){
+        if(p.hours>0) html+='<div class="detail-chip chip-extra"><div class="dc-val">'+p.hours+'h</div><div class="dc-label">'+p.label+'</div></div>';
       });
       html+='</div></div>';
     }
@@ -299,7 +311,7 @@ function renderMonth(){
   $("sumRow").innerHTML=[
     {n:tp+"h",l:"총 적치",c:"#64748b"},
     {n:remain.toFixed(1)+"h",l:"잔여",c:"#6366f1"},
-    {n:usedThisMonth.toFixed(1)+"h",l:"당월 사용시간",c:"#f59e0b"}
+    {n:usedThisMonth.toFixed(1)+"h",l:"사용시간",c:"#f59e0b"}
   ].map(function(s){return '<div class="sum-item" style="border-left:3px solid '+s.c+'"><div class="sum-num">'+s.n+'</div><div class="sum-label">'+s.l+'</div></div>';}).join("");
 
   var firstDay=new Date(y,m,1).getDay();
