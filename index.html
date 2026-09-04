@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>보상휴가 관리</title>
+<title>대휴관리 시스템</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -108,7 +108,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
 <body>
 
 <div id="homeScreen" class="bg"><div class="card">
-  <h1 class="app-title">보상휴가 관리</h1>
+  <h1 class="app-title">대휴관리 시스템</h1>
   <p class="app-sub">신세계푸드</p>
   <p id="connectingMsg" class="connecting">연결 중...</p>
   <div id="sheetField" class="field hidden">
@@ -155,14 +155,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#f8fafc;colo
       <h3 id="modalTitle" class="modal-title"></h3>
       <button class="close-btn" onclick="closeModal()">✕</button>
     </div>
-    <label style="font-size:13px;font-weight:600;color:#475569;display:block;margin-bottom:10px">보상휴가 시간</label>
+    <label style="font-size:13px;font-weight:600;color:#475569;display:block;margin-bottom:10px">대휴 시간</label>
     <div class="chip-row" id="chipRow"></div>
     <div class="hour-row">
       <input id="hourInput" class="hour-input" type="number" inputmode="decimal" step="0.5" placeholder="직접 입력">
       <span class="hour-unit">시간</span>
     </div>
     <div id="submitMsg" class="submit-msg hidden"></div>
-    <button id="submitBtn" class="btn-leave" onclick="handleSubmit()">보상휴가 등록</button>
+    <button id="submitBtn" class="btn-leave" onclick="handleSubmit()">대휴 등록</button>
     <button id="deleteBtn" class="btn-delete hidden" onclick="handleDelete()">등록 취소</button>
   </div>
 </div>
@@ -343,7 +343,7 @@ function openModal(ds){
   state.selectedDate=ds;
   var parts=ds.split("-");
   var d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
-  $("modalTitle").textContent=(d.getMonth()+1)+"/"+d.getDate()+"("+DAY_KR[d.getDay()]+") 보상휴가 등록";
+  $("modalTitle").textContent=(d.getMonth()+1)+"/"+d.getDate()+"("+DAY_KR[d.getDay()]+") 대휴등록";
   var entry=getEntry(ds);
   state.hours=entry&&entry.hours>0?String(entry.hours):"8";
   $("hourInput").value=state.hours;
@@ -369,7 +369,7 @@ function handleSubmit(){
     if(d.success){msg.className="submit-msg ok";msg.textContent="✓ 등록완료 | 잔여: "+d.remaining.toFixed(1)+"h";show("submitMsg");refreshData();setTimeout(closeModal,1500);}
     else{msg.className="submit-msg err";msg.textContent="⚠ "+(d.error||"저장 실패");show("submitMsg");}
   }).catch(function(){var msg=$("submitMsg");msg.className="submit-msg err";msg.textContent="⚠ 서버 연결 실패";show("submitMsg");})
-  .finally(function(){$("submitBtn").disabled=false;$("submitBtn").textContent="보상휴가 등록";});
+  .finally(function(){$("submitBtn").disabled=false;$("submitBtn").textContent="대휴 등록";});
 }
 
 function handleDelete(){
