@@ -262,7 +262,7 @@ function renderDash(){
     }
     // 추가사용 행
     if(hasExtraDetail){
-      html+='<div class="detail-row"><span class="detail-row-label">추가</span><div class="detail-chips">';
+      html+='<div class="detail-row"><span class="detail-row-label">추가사용</span><div class="detail-chips">';
       ed.extraItems.forEach(function(p){
         if(p.hours>0) html+='<div class="detail-chip chip-extra"><div class="dc-val">'+p.hours+'h</div><div class="dc-label">'+p.label+'</div></div>';
       });
@@ -311,7 +311,7 @@ function renderMonth(){
   $("sumRow").innerHTML=[
     {n:tp+"h",l:"총 적치",c:"#64748b"},
     {n:remain.toFixed(1)+"h",l:"잔여",c:"#6366f1"},
-    {n:usedThisMonth.toFixed(1)+"h",l:"사용시간",c:"#f59e0b"}
+    {n:usedThisMonth.toFixed(1)+"h",l:"당월 사용시간",c:"#f59e0b"}
   ].map(function(s){return '<div class="sum-item" style="border-left:3px solid '+s.c+'"><div class="sum-num">'+s.n+'</div><div class="sum-label">'+s.l+'</div></div>';}).join("");
 
   var firstDay=new Date(y,m,1).getDay();
